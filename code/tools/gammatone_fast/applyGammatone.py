@@ -31,7 +31,7 @@ def apply_fbank(x,fs,cfs,align=False,hilbert_envelope=False):
     tmp_t = np.array([range(gL)])*1.0/fs
 
     # calculate impulse responses:
-    y = np.zeros((len(x)+gL-1,n_channels))
+    y = np.zeros((len(x),n_channels))
     for i in range(n_channels):
         gain_term = gain[i]*fs**3
         poly_term = tmp_t**(filterOrder-1)
@@ -39,10 +39,10 @@ def apply_fbank(x,fs,cfs,align=False,hilbert_envelope=False):
         oscil_term = np.cos(2*np.pi*cfs[i]*tmp_t+phase)
         gt[:,i] = gain_term*poly_term*damp_term*oscil_term; 
         bm = scipy.signal.fftconvolve(x,gt[:,i].reshape((gL,1)))
-        y[:,i] = bm[:,0]
+        y[:,i] = bm[:len(x),0]
 
         if hilbert_envelope:
-            bm_hilbert = scipy.signal.hilbert(bm[:,0])
+            bm_hilbert = scipy.signal.hilbert(bm[:len(x),0])
             y[:,i] = abs(bm_hilbert)
 
     return y
@@ -57,12 +57,14 @@ def make_centerFreq(minCf,maxCf,n_channels):
     return ErbRateToHz(np.linspace(HzToErbRate(minCf),HzToErbRate(maxCf),n_channels));
 
 if __name__=='__main__':
-    (rate,sig) = wav.read("/corpora/timit/all_8k/fadg0/sa1-fadg0.wav")
+    (rate,sig) = wav.read("/scratch2/nxs113020/pyknograms/selection.wav")
     x = sig.reshape((len(sig),1))
     fs = rate
-    cfs = make_centerFreq(20,3800,100)
-    filtered_x = apply_fbank(x,fs,cfs)
-    #pylab.imshow(filtered_x[:,::-1].T,aspect='auto')
+    cfs = make_centerFreq(20,3800,40)
+    filtered_x = apply_fbank(x,fs,cfs,hilbert_envelope=False)
     for i in range(40):
-        pylab.plot(filtered_x[:,i]/abs(max(filtered_x[:,i])) + i)
-    pylab.show()
+        #pylab.plot(filtered_x[:,i]/abs(max(filtered_x[:,i])) + i)
+        for j in range(len(filtered_x[:,i])):
+            print filtered_x[j,i],
+        print 
+    #pylab.show()
