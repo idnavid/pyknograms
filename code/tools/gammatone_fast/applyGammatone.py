@@ -10,7 +10,7 @@ import scipy.signal
 import scipy.io.wavfile as wav
 import pylab 
 
-def apply_fbank(x,fs,cfs,align=False):
+def apply_fbank(x,fs,cfs,align=False,hilbert_envelope=False):
     """
         x:        input signal (numpy array)
         fs:       sampling rate (integer)
@@ -40,7 +40,11 @@ def apply_fbank(x,fs,cfs,align=False):
         gt[:,i] = gain_term*poly_term*damp_term*oscil_term; 
         bm = scipy.signal.fftconvolve(x,gt[:,i].reshape((gL,1)))
         y[:,i] = bm[:,0]
-        #print bm.shape
+
+        if hilbert_envelope:
+            bm_hilbert = scipy.signal.hilbert(bm[:,0])
+            y[:,i] = abs(bm_hilbert)
+
     return y
 
 def ErbRateToHz(erb):
@@ -56,7 +60,9 @@ if __name__=='__main__':
     (rate,sig) = wav.read("/corpora/timit/all_8k/fadg0/sa1-fadg0.wav")
     x = sig.reshape((len(sig),1))
     fs = rate
-    cfs = make_centerFreq(20,3800,40)
+    cfs = make_centerFreq(20,3800,100)
     filtered_x = apply_fbank(x,fs,cfs)
-    pylab.imshow(filtered_x[:,::-1].T,aspect='auto')
+    #pylab.imshow(filtered_x[:,::-1].T,aspect='auto')
+    for i in range(40):
+        pylab.plot(filtered_x[:,i]/abs(max(filtered_x[:,i])) + i)
     pylab.show()
