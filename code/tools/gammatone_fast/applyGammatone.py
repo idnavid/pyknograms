@@ -15,7 +15,7 @@ import sys
 sys.path.append('/scratch2/nxs113020/pyknograms/code/tools/teo')
 import energy_operator
 
-def apply_fbank(x,fs,cfs,align=False,hilbert_envelope=False,teager=False):
+def apply_fbank(x,fs,cfs,align=False,hilbert_envelope=False):
     """
         x:        input signal (numpy array)
         fs:       sampling rate (integer)
@@ -49,9 +49,6 @@ def apply_fbank(x,fs,cfs,align=False,hilbert_envelope=False,teager=False):
         if hilbert_envelope:
             bm_hilbert = scipy.signal.hilbert(bm[:len(x),0])
             y[:,i] = abs(bm_hilbert)
-        if teager:
-            bm_teager = energy_operator.teager(bm[:len(x)])
-            y[:-2,i] = bm_teager.reshape((len(bm_teager),))
 
     return y
 
@@ -69,11 +66,9 @@ if __name__=='__main__':
     x = sig.reshape((len(sig),1))
     fs = rate
     cfs = make_centerFreq(20,3800,40)
-    filtered_x = apply_fbank(x,fs,cfs,hilbert_envelope=False,teager=False)
-    teager_x   = apply_fbank(x,fs,cfs,teager=True)
+    filtered_x = apply_fbank(x,fs,cfs,hilbert_envelope=True)
     for i in range(40):
         pylab.plot(filtered_x[:,i]/abs(max(filtered_x[:,i])) + i)
-        pylab.plot(teager_x[:,i]/abs(max(teager_x[:,i])) + i)
         #for j in range(len(filtered_x[:,i])):
         #    print filtered_x[j,i],
         #print 
