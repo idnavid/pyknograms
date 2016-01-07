@@ -27,7 +27,7 @@ def enframe(x, winlen, hoplen):
     return xf
 
 if __name__=='__main__':
-    (rate,sig) = wav.read("/scratch2/nxs113020/pyknograms/selection.wav")
+    (rate,sig) = wav.read("/scratch2/nxs113020/pyknograms/code/tools/pykno/tmp.wav")
     x = sig.reshape((len(sig),1))
     fs = rate
     window_size = int(0.025*fs)
@@ -35,8 +35,7 @@ if __name__=='__main__':
 
     cfs = make_centerFreq(20,3800,40)
     filtered_x = apply_fbank(x,fs,cfs)
-
-    tmp = np.zeros((4000,38))
+    
     for i in range(40):
         a,f = am_fm_decomposition(filtered_x[:,i])
         a[np.where(a>1e5)] = 0
@@ -50,8 +49,5 @@ if __name__=='__main__':
         
         weighted_freqs = fs*np.divide(framed_num,framed_den)
         
-        for k in range(38):
-            pylab.scatter(k,weighted_freqs[k]) 
-    pylab.show()
         
-        
+ 
