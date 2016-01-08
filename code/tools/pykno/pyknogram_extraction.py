@@ -26,16 +26,24 @@ def enframe(x, winlen, hoplen):
         xf[ii] = x[ii * hoplen : ii * hoplen + winlen]
     return xf
 
+
+
+
+
 if __name__=='__main__':
-    (rate,sig) = wav.read("/scratch2/nxs113020/pyknograms/code/tools/pykno/tmp.wav")
+    (rate,sig) = wav.read("/corpora/timit/all_8k/fadg0/sa1-fadg0.wav")
     x = sig.reshape((len(sig),1))
     fs = rate
     window_size = int(0.025*fs)
     shift_size = int(0.010*fs)
-
-    cfs = make_centerFreq(20,3800,40)
+    
+    nChannels = 40
+    cfs = make_centerFreq(20,3800,nChannels)
     filtered_x = apply_fbank(x,fs,cfs)
     
+    nTime =  1 + np.int(np.floor((len(x) - window_size) / float(shift_size)))
+    nFreq = nChannels
+    f_bins = np.zeros((nTime,nFreq))
     for i in range(40):
         a,f = am_fm_decomposition(filtered_x[:,i])
         a[np.where(a>1e5)] = 0
@@ -48,6 +56,13 @@ if __name__=='__main__':
         framed_den = np.sum(enframe(denominator,window_size,shift_size),axis=1)
         
         weighted_freqs = fs*np.divide(framed_num,framed_den)
-        
-        
- 
+
+        k = 0
+        for j in weighted_freqs:
+            if abs(j-cfs[i])<0.05*cfs[i]:
+                f_bins[k,i] = 1
+            k+=1
+    pylab.imshow(f_bins.T,aspect='auto')
+    pylab.show()
+
+   
