@@ -56,13 +56,7 @@ if __name__=='__main__':
         framed_den = np.sum(enframe(denominator,window_size,shift_size),axis=1)
         
         weighted_freqs = fs*np.divide(framed_num,framed_den)
-
-        k = 0
-        for j in weighted_freqs:
-            if abs(j-cfs[i])<0.05*cfs[i]:
-                f_bins[k,i] = 1
-            k+=1
-    pylab.imshow(f_bins.T,aspect='auto')
+        pylab.scatter(range(len(weighted_freqs)),weighted_freqs)
     pylab.show()
 
    
