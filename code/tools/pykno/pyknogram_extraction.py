@@ -31,7 +31,7 @@ def enframe(x, winlen, hoplen):
 
 
 if __name__=='__main__':
-    (rate,sig) = wav.read("/corpora/timit/all_8k/fadg0/sa1-fadg0.wav")
+    (rate,sig) = wav.read("/scratch2/nxs113020/pyknograms/selection.wav")
     x = sig.reshape((len(sig),1))
     fs = rate
     window_size = int(0.025*fs)
@@ -43,8 +43,8 @@ if __name__=='__main__':
     
     nTime =  1 + np.int(np.floor((len(x) - window_size) / float(shift_size)))
     nFreq = nChannels
-    f_bins = np.zeros((nTime,nFreq))
-    for i in range(40):
+    f_bins = np.zeros((nTime,fs/2))
+    for i in range(nChannels):
         a,f = am_fm_decomposition(filtered_x[:,i])
         a[np.where(a>1e5)] = 0
         a_filtered = medfilt(a,11)
@@ -54,9 +54,13 @@ if __name__=='__main__':
         
         framed_num = np.sum(enframe(numerator,window_size,shift_size),axis=1)
         framed_den = np.sum(enframe(denominator,window_size,shift_size),axis=1)
-        
+                
         weighted_freqs = fs*np.divide(framed_num,framed_den)
-        pylab.scatter(range(len(weighted_freqs)),weighted_freqs)
+        candidates = np.where(abs(weighted_freqs-cfs[i])<0.05*cfs[i])
+        x = np.floor(weighted_freqs[candidates])
+        x = x.astype(np.int64)
+        #print candidates
+        f_bins[candidates[0],x] = 1
+    pylab.imshow(f_bins[:,:fs/4].T,aspect='auto')
     pylab.show()
-
-   
+    
