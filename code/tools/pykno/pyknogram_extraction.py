@@ -28,10 +28,8 @@ def enframe(x, winlen, hoplen):
 
 
 
-
-
-if __name__=='__main__':
-    (rate,sig) = wav.read("/scratch2/nxs113020/pyknograms/selection.wav")
+def pyknogram(file_name):
+    (rate,sig) = wav.read(file_name)
     x = sig.reshape((len(sig),1))
     fs = rate
     window_size = int(0.025*fs)
@@ -61,6 +59,4 @@ if __name__=='__main__':
         x = x.astype(np.int64)
         #print candidates
         f_bins[candidates[0],x] = 1
-    pylab.imshow(f_bins[:,:fs/4].T,aspect='auto')
-    pylab.show()
-    
+    return f_bins    
