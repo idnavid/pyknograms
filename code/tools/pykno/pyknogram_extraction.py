@@ -35,13 +35,13 @@ def pyknogram(file_name):
     window_size = int(0.025*fs)
     shift_size = int(0.010*fs)
     
-    nChannels = 40
+    nChannels = 200
     cfs = make_centerFreq(20,3800,nChannels)
-    filtered_x = apply_fbank(x,fs,cfs)
+    filtered_x,bandwidths = apply_fbank(x,fs,cfs)
     
     nTime =  1 + np.int(np.floor((len(x) - window_size) / float(shift_size)))
     nFreq = nChannels
-    f_bins = np.zeros((nTime,fs/2))
+    pykno_bins = np.zeros((nTime,nChannels)) # density bins
     for i in range(nChannels):
         a,f = am_fm_decomposition(filtered_x[:,i])
         a[np.where(a>1e5)] = 0
@@ -52,11 +52,9 @@ def pyknogram(file_name):
         
         framed_num = np.sum(enframe(numerator,window_size,shift_size),axis=1)
         framed_den = np.sum(enframe(denominator,window_size,shift_size),axis=1)
-                
+         
         weighted_freqs = fs*np.divide(framed_num,framed_den)
-        candidates = np.where(abs(weighted_freqs-cfs[i])<0.05*cfs[i])
-        x = np.floor(weighted_freqs[candidates])
-        x = x.astype(np.int64)
-        #print candidates
-        f_bins[candidates[0],x] = 1
-    return f_bins    
+        candidates = np.where( abs(weighted_freqs-cfs[i]) < bandwidths[i]/10 )
+         
+        pykno_bins[candidates,i] += framed_den[candidates]/(np.sqrt(2*bandwidths[i]))
+    return pykno_bins

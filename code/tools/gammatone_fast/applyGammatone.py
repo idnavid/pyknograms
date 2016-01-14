@@ -50,7 +50,7 @@ def apply_fbank(x,fs,cfs,align=False,hilbert_envelope=False):
             bm_hilbert = scipy.signal.hilbert(bm[:len(x),0])
             y[:,i] = abs(bm_hilbert)
 
-    return y
+    return y, b
 
 def ErbRateToHz(erb):
     return (10**(erb/21.4)-1)/4.37e-3
@@ -69,7 +69,4 @@ if __name__=='__main__':
     filtered_x = apply_fbank(x,fs,cfs,hilbert_envelope=True)
     for i in range(40):
         pylab.plot(filtered_x[:,i]/abs(max(filtered_x[:,i])) + i)
-        #for j in range(len(filtered_x[:,i])):
-        #    print filtered_x[j,i],
-        #print 
     pylab.show()
