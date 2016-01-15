@@ -35,7 +35,7 @@ def pyknogram(file_name):
     window_size = int(0.025*fs)
     shift_size = int(0.010*fs)
     
-    nChannels = 200
+    nChannels = 120
     cfs = make_centerFreq(20,3800,nChannels)
     filtered_x,bandwidths = apply_fbank(x,fs,cfs)
     
