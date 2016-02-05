@@ -31,7 +31,7 @@ def enframe(x, winlen, hoplen):
 def pyknogram(file_name):
     (rate,sig) = wav.read(file_name)
     x = sig.reshape((len(sig),1))
-    x = x[10000:15000]
+    #x = x[10000:15000]
     fs = rate
     window_size = int(0.025*fs)
     shift_size = int(0.010*fs)
