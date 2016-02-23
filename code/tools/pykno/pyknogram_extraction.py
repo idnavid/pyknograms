@@ -12,6 +12,19 @@ from applyGammatone import *
 
 from instant_amplitude_frequency import am_fm_decomposition
 
+
+def sfx(pykno_bins_in):
+    """
+      calculate mean and variance spectral flux (sfx) features for 
+      pyknograms. 
+        """
+    pykno_d0 = pykno_bins_in;
+    pykno_d1 = np.roll(pykno_bins_in,1, axis = 0)
+    
+    mean_sfx = np.mean(np.abs(pykno_d0 - pykno_d1),axis = 1)
+    var_sfx = np.var(np.abs(pykno_d0 - pykno_d1), axis = 1)
+    return mean_sfx, var_sfx
+
 def enframe(x, winlen, hoplen):
     """
       receives a 1D numpy array and divides it into frames.
@@ -31,7 +44,7 @@ def enframe(x, winlen, hoplen):
 def pyknogram(file_name):
     (rate,sig) = wav.read(file_name)
     x = sig.reshape((len(sig),1))
-    #x = x[10000:15000]
+    #x = x[13582:65645]
     fs = rate
     window_size = int(0.025*fs)
     shift_size = int(0.010*fs)
