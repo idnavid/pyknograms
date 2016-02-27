@@ -3,7 +3,7 @@ import pylab
 import sys
 import numpy as np
 
-sys.path.append('/scratch2/nxs113020/pyknograms/code/tools/pykno')
+sys.path.append('tools/pykno')
 from pyknogram_extraction import *
 
 
