@@ -3,7 +3,7 @@
 import numpy as np
 import sys
 
-sys.path.append('/scratch2/nxs113020/pyknograms/code/tools/teo')
+sys.path.append('tools/teo')
 from energy_operator import teager
 def am_fm_decomposition(x):
     """
