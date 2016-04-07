@@ -18,7 +18,10 @@ def length_to_segment(fileid, filename):
     start_string = "%07d"%(1000*start_time)
     end_string = "%07d"%(1000*end_time)
     fseg.write(fileid+'_'+start_string+'_'+end_string+' '+fileid+' '+str(start_time)+' '+str(end_time)+'\n')
-    ftext.write(fileid+'_'+start_string+'_'+end_string+' '+'ovl'+'\n')
+    if fileid[0]=='t':
+        ftext.write(fileid+'_'+start_string+'_'+end_string+' '+'O'+'\n') # O: overlap
+    elif fileid[0]=='s':
+        ftext.write(fileid+'_'+start_string+'_'+end_string+' '+'C'+'\n') # C: clean
     fseg.close()
     ftext.close()
 

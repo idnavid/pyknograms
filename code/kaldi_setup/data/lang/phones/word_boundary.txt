@@ -1,0 +1,13 @@
+UNK nonword
+UNK_B begin
+UNK_E end
+UNK_I internal
+UNK_S singleton
+C_B begin
+C_E end
+C_I internal
+C_S singleton
+O_B begin
+O_E end
+O_I internal
+O_S singleton

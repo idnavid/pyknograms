@@ -1,0 +1,11 @@
+UNK UNK_B UNK_E UNK_I UNK_S
+C_B C_E C_I C_S O_B O_E O_I O_S
+C_B O_B 
+C_E O_E 
+C_I O_I 
+C_S O_S 
+UNK 
+UNK_B 
+UNK_E 
+UNK_I 
+UNK_S 

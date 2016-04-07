@@ -1,0 +1,16 @@
+<eps> 0
+UNK 1
+UNK_B 2
+UNK_E 3
+UNK_I 4
+UNK_S 5
+C_B 6
+C_E 7
+C_I 8
+C_S 9
+O_B 10
+O_E 11
+O_I 12
+O_S 13
+#0 14
+#1 15

@@ -1,0 +1,4 @@
+C C_S
+O O_S
+UNK UNK_S
+<eps> UNK
