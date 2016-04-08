@@ -11,9 +11,9 @@ trainsir=0dB
 
 
 # Test:
-testsir=0dB
-#steps/make_mfcc.sh --nj 15 --cmd "$train_cmd" data/test_$testsir exp/make_mfcc/test_$testsir $mfcc_dir
-#steps/compute_cmvn_stats.sh data/test_$testsir exp/make_mfcc/test_$testsir $mfcc_dir
+testsir=6dB
+steps/make_mfcc.sh --nj 15 --cmd "$train_cmd" data/test_$testsir exp/make_mfcc/test_$testsir $mfcc_dir
+steps/compute_cmvn_stats.sh data/test_$testsir exp/make_mfcc/test_$testsir $mfcc_dir
 
 
 steps/decode.sh --nj 10 --cmd "$train_cmd" exp/mono_$trainsir/graph data/test_$testsir exp/mono_$trainsir/decode_toydev_$testsir
