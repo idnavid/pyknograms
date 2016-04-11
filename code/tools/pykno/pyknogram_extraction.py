@@ -6,7 +6,7 @@ import scipy.io.wavfile as wav
 from scipy.signal import medfilt
 import pylab
 
-sys.path.append('tools/gammatone_fast')
+sys.path.append('/scratch2/nxs113020/pyknograms/code/tools/gammatone_fast')
 from applyGammatone import *
 
 
