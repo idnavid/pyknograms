@@ -4,10 +4,10 @@ plp_dir=/erasable/nxs113020/ssc_plp
 . path.sh
 . cmd.sh
 trainsir=0dB
-#steps/make_plp.sh --nj 200 --cmd "$train_cmd" data/train_$trainsir exp/make_plp/train_$trainsir $plp_dir
-#steps/compute_cmvn_stats.sh data/train_$trainsir exp/make_plp/train_$trainsir $plp_dir
-#steps/train_mono.sh  --nj 50 --cmd "$train_cmd" data/train_$trainsir data/lang exp/mono_plp_$trainsir
-#utils/mkgraph.sh --mono data/lang exp/mono_plp_$trainsir exp/mono_plp_$trainsir/graph 
+steps/make_plp.sh --nj 200 --cmd "$train_cmd" data/train_$trainsir exp/make_plp/train_$trainsir $plp_dir
+steps/compute_cmvn_stats.sh data/train_$trainsir exp/make_plp/train_$trainsir $plp_dir
+steps/train_mono.sh  --nj 50 --cmd "$train_cmd" data/train_$trainsir data/lang exp/mono_plp_$trainsir
+utils/mkgraph.sh --mono data/lang exp/mono_plp_$trainsir exp/mono_plp_$trainsir/graph 
 
 
 # Test:
