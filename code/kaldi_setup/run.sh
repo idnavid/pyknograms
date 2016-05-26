@@ -3,7 +3,7 @@
 . path.sh
 . cmd.sh 
 run_mfcc() {
-mfcc_dir=/erasable/nxs113020/ssc_mfcc
+mfcc_dir=ssc_mfcc
 trainsir=0dB
     #rm data/train_$trainsir/feats.scp
     #rm data/train_$trainsir/cmvn.scp
@@ -25,7 +25,7 @@ trainsir=0dB
     cat exp/mono_$trainsir/decode_toydev_$testsir/log/decode.* | grep "_" | grep -v "LOG" | grep -v "-" | sort > data/test_$testsir/text_mfcc
     
 }
-#run_mfcc
+run_mfcc
 
 run_plp() {
     plp_dir=/erasable/nxs113020/ssc_plp
@@ -100,4 +100,4 @@ run_pykno() {
     # Create hypothetic text sequency using decoding output (log files)
     cat exp/mono_pykno_$trainsir/decode_toydev_$testsir/log/decode.* | grep "_" | grep -v "LOG" | grep -v "-" | sort > data/test_$testsir/text_pykno
 }
-run_pykno
+#run_pykno

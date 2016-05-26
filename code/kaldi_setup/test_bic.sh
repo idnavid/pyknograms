@@ -20,7 +20,7 @@ make_ref(){
     done
 
 }
-#make_ref
+make_ref
 
 run_changedetection() {
 
