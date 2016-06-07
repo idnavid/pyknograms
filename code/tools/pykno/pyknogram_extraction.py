@@ -6,7 +6,7 @@ import scipy.io.wavfile as wav
 from scipy.signal import medfilt
 import pylab
 
-sys.path.append('/scratch2/nxs113020/pyknograms/code/tools/gammatone_fast')
+sys.path.append('../../code/tools/gammatone_fast')
 from applyGammatone import *
 
 
@@ -48,7 +48,7 @@ def pyknogram(file_name):
     fs = rate
     window_size = int(0.025*fs)
     shift_size = int(0.010*fs)
-    
+     
     nChannels = 120
     cfs = make_centerFreq(20,3800,nChannels)
     filtered_x,bandwidths = apply_fbank(x,fs,cfs)
@@ -68,7 +68,8 @@ def pyknogram(file_name):
         framed_den = np.sum(enframe(denominator,window_size,shift_size),axis=1)
          
         weighted_freqs = fs*np.divide(framed_num,framed_den)
-        candidates = np.where( abs(weighted_freqs-cfs[i]) < bandwidths[i]/10 )
-         
-        pykno_bins[candidates,i] += framed_den[candidates]/(np.sqrt(2*bandwidths[i]))
+        #candidates = np.where( abs(weighted_freqs-cfs[i]) < bandwidths[i]/10 )
+        candidates = np.where( abs(weighted_freqs-cfs[i]) >= 0 )
+        
+        pykno_bins[candidates,i] += np.log(framed_den[candidates]/(np.sqrt(2*bandwidths[i])) + 1e-7)
     return pykno_bins

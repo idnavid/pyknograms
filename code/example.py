@@ -3,7 +3,7 @@ import pylab
 import sys
 import numpy as np
 
-sys.path.append('tools/pykno')
+sys.path.append('../tools/pykno')
 from pyknogram_extraction import *
 
 
@@ -16,9 +16,9 @@ pykno = pyknogram(wav_name)
 
 m1, v1 = sfx(pykno)
 
-pylab.plot(np.log(m1+1e-7))
+#pylab.plot(np.log(m1+1e-7))
+#pylab.figure()
+#pylab.plot(np.log(v1+1e-7))
 pylab.figure()
-pylab.plot(np.log(v1+1e-7))
-pylab.figure()
-pylab.imshow(np.log(pykno.T + 1e-7),aspect='auto')
+pylab.imshow((pykno.T + 1e-7),aspect='auto')
 pylab.show()
