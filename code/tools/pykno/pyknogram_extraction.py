@@ -40,6 +40,9 @@ def enframe(x, winlen, hoplen):
     return xf
 
 
+def plot_x_a(s,a):
+    pylab.plot(s,linewidth=4,color='b')
+    pylab.plot(a,linewidth=2,color='r')
 
 def pyknogram(file_name):
     (rate,sig) = wav.read(file_name)
@@ -49,7 +52,7 @@ def pyknogram(file_name):
     window_size = int(0.025*fs)
     shift_size = int(0.010*fs)
      
-    nChannels = 120
+    nChannels = 20
     cfs = make_centerFreq(20,3800,nChannels)
     filtered_x,bandwidths = apply_fbank(x,fs,cfs)
     
@@ -58,6 +61,8 @@ def pyknogram(file_name):
     pykno_bins = np.zeros((nTime,nChannels)) # density bins
     for i in range(nChannels):
         a,f = am_fm_decomposition(filtered_x[:,i])
+        # plot - signal and instantaneous amplitude
+        plot_x_a(filtered_x[:,i]*(1./max(abs(filtered_x[:,i])))+i,f+i)
         a[np.where(a>1e5)] = 0
         a_filtered = medfilt(a,11)
         
@@ -68,8 +73,9 @@ def pyknogram(file_name):
         framed_den = np.sum(enframe(denominator,window_size,shift_size),axis=1)
          
         weighted_freqs = fs*np.divide(framed_num,framed_den)
-        #candidates = np.where( abs(weighted_freqs-cfs[i]) < bandwidths[i]/10 )
-        candidates = np.where( abs(weighted_freqs-cfs[i]) >= 0 )
+        candidates = np.where( abs(weighted_freqs-cfs[i]) < bandwidths[i]/10 )
+        #candidates = np.where( abs(weighted_freqs-cfs[i]) >= 0 )
         
         pykno_bins[candidates,i] += np.log(framed_den[candidates]/(np.sqrt(2*bandwidths[i])) + 1e-7)
+    pylab.show()
     return pykno_bins

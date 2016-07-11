@@ -52,47 +52,52 @@ run_plp() {
 }
 #run_plp
 
-run_pykno() {
+train_pykno() {
     pykno_dir=ssc_pykno
     trainsir=0dB
     . ~/.bashrc
-    #python local/pykno_feat_extraction.py data/train_$trainsir $pykno_dir
-    ##~/bin/myJsplit -M 300 -b 1 -n pykno_ssc pykno_jobs.txt
-    #bash pykno_jobs.txt 
-    #rm pykno_jobs.txt
-    #
-    #cat data/train_$trainsir/wav.scp | cut -d ' ' -f 1 | perl -ne 'if(m/(\S+)/){$pykno_dir="ssc_pykno/"; print "/home/nxs113020/kaldi-trunk/src/featbin/copy-feats ark,t:${pykno_dir}/$1 ark,scp:${pykno_dir}/$1.ark,${pykno_dir}/$1.scp\n"}' > ark2scp_jobs.txt
-    ##~/bin/myJsplit -M 300 -b 1 -n pykno_ssc ark2scp_jobs.txt
-    #bash ark2scp_jobs.txt
-    #rm ark2sco_jobs.txt
-    #
-    #rm data/train_$trainsir/feats.scp
-    #cat data/train_$trainsir/wav.scp | cut -d ' ' -f 1 | perl -ne 'if(m/(\S+)/){print `cat ssc_pykno/$1.scp`}' >> data/train_$trainsir/feats.scp
-    #paste -d ' ' data/train_$trainsir/utt2spk data/train_$trainsir/feats.scp | cut -d ' ' -f 1,4 > tmp
-    #mv tmp data/train_$trainsir/feats.scp 
-    #
-    #est-pca --dim=20 scp:data/train_$trainsir/feats.scp data/train_$trainsir/pca.mat
-    ##transform-feats data/train_$trainsir/pca.mat scp:data/train_$trainsir/feats.scp ark,scp:data/train_$trainsir/feats.ark,data/train_$trainsir/feats_pca.scp
-    ##mv data/train_$trainsir/feats_pca.scp data/train_$trainsir/feats.scp
-    #
-    #steps/compute_cmvn_stats.sh data/train_$trainsir exp/make_pykno/train_$trainsir $pykno_dir
-    #rm -rf exp/mono_pykno_$trainsir
-    #bash local/train_mono_pca.sh  --nj 50 --cmd "$train_cmd" data/train_$trainsir data/lang exp/mono_pykno_$trainsir
-    #utils/mkgraph.sh --mono data/lang exp/mono_pykno_$trainsir exp/mono_pykno_$trainsir/graph 
-    #
-     
+    python local/pykno_feat_extraction.py data/train_$trainsir $pykno_dir
+    #~/bin/myJsplit -M 300 -b 1 -n pykno_ssc pykno_jobs.txt
+    bash pykno_jobs.txt 
+    rm pykno_jobs.txt
     
-    ## Test:
-    #python local/pykno_feat_extraction.py data/test_$testsir $pykno_dir
-    ##~/bin/myJsplit -M 300 -b 1 -n pykno_ssc pykno_jobs.txt
-    #bash pykno_jobs.txt
-    #rm pykno_jobs.txt
-    #
-    #cat data/test_$testsir/wav.scp | cut -d ' ' -f 1 | perl -ne 'if(m/(\S+)/){$pykno_dir="ssc_pykno/"; print "/home/nxs113020/kaldi-trunk/src/featbin/copy-feats ark,t:$pykno_dir/$1 ark,scp:$pykno_dir/$1.ark,$pykno_dir/$1.scp\n"}' > ark2scp_jobs.txt
-    ##~/bin/myJsplit -M 300 -b 1 -n pykno_ssc ark2scp_jobs.txt
-    #bash ark2scp_jobs.txt
-    #rm ark2scp_jobs.txt
-    #
+    cat data/train_$trainsir/wav.scp | cut -d ' ' -f 1 | perl -ne 'if(m/(\S+)/){$pykno_dir="ssc_pykno/"; print "/home/nxs113020/kaldi-trunk/src/featbin/copy-feats ark,t:${pykno_dir}/$1 ark,scp:${pykno_dir}/$1.ark,${pykno_dir}/$1.scp\n"}' > ark2scp_jobs.txt
+    #~/bin/myJsplit -M 300 -b 1 -n pykno_ssc ark2scp_jobs.txt
+    bash ark2scp_jobs.txt
+    rm ark2sco_jobs.txt
+    
+    rm data/train_$trainsir/feats.scp
+    cat data/train_$trainsir/wav.scp | cut -d ' ' -f 1 | perl -ne 'if(m/(\S+)/){print `cat ssc_pykno/$1.scp`}' >> data/train_$trainsir/feats.scp
+    paste -d ' ' data/train_$trainsir/utt2spk data/train_$trainsir/feats.scp | cut -d ' ' -f 1,4 > tmp
+    mv tmp data/train_$trainsir/feats.scp 
+    
+    #est-pca --dim=20 scp:data/train_$trainsir/feats.scp data/train_$trainsir/pca.mat
+    #transform-feats data/train_$trainsir/pca.mat scp:data/train_$trainsir/feats.scp ark,scp:data/train_$trainsir/feats.ark,data/train_$trainsir/feats_pca.scp
+    #mv data/train_$trainsir/feats_pca.scp data/train_$trainsir/feats.scp
+    
+    steps/compute_cmvn_stats.sh data/train_$trainsir exp/make_pykno/train_$trainsir $pykno_dir
+    rm -rf exp/mono_pykno_$trainsir
+    bash steps/train_mono.sh  --nj 50 --cmd "$train_cmd" data/train_$trainsir data/lang exp/mono_pykno_$trainsir
+    utils/mkgraph.sh --mono data/lang exp/mono_pykno_$trainsir exp/mono_pykno_$trainsir/graph 
+   
+}
+#train_pykno
+
+test_pykno(){
+    pykno_dir=ssc_pykno
+    trainsir=0dB
+    . ~/.bashrc
+    #Test:    
+    python local/pykno_feat_extraction.py data/test_$testsir $pykno_dir
+    #~/bin/myJsplit -M 300 -b 1 -n pykno_ssc pykno_jobs.txt
+    bash pykno_jobs.txt
+    rm pykno_jobs.txt
+    
+    cat data/test_$testsir/wav.scp | cut -d ' ' -f 1 | perl -ne 'if(m/(\S+)/){$pykno_dir="ssc_pykno/"; print "/home/nxs113020/kaldi-trunk/src/featbin/copy-feats ark,t:$pykno_dir/$1 ark,scp:$pykno_dir/$1.ark,$pykno_dir/$1.scp\n"}' > ark2scp_jobs.txt
+    #~/bin/myJsplit -M 300 -b 1 -n pykno_ssc ark2scp_jobs.txt
+    bash ark2scp_jobs.txt
+    rm ark2scp_jobs.txt
+    
     rm data/test_$testsir/feats.scp
     cat data/test_$testsir/wav.scp | cut -d ' ' -f 1 | perl -ne 'if(m/(\S+)/){print `cat ssc_pykno/$1.scp`}' >> data/test_$testsir/feats.scp
     
@@ -105,4 +110,5 @@ run_pykno() {
     # Create hypothetic text sequency using decoding output (log files)
     cat exp/mono_pykno_$trainsir/decode_toydev_$testsir/log/decode.* | grep "_" | grep -v "LOG" | grep -v "-" | sort > data/test_$testsir/text_pykno
 }
-run_pykno
+test_pykno
+
