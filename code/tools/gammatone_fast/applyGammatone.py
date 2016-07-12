@@ -12,7 +12,7 @@ import pylab
 import sys
 
 
-sys.path.append('../../code/tools/teo')
+sys.path.append('tools/teo')
 import energy_operator
 
 def apply_fbank(x,fs,cfs,align=False,hilbert_envelope=False):
