@@ -40,9 +40,14 @@ def enframe(x, winlen, hoplen):
     return xf
 
 
-def plot_x_a(s,a):
-    pylab.plot(s,linewidth=4,color='b')
-    pylab.plot(a,linewidth=2,color='r')
+def plot_x_a_f(s,a,f):
+    pylab.figure()
+    pylab.plot(s)
+    pylab.figure()
+    pylab.plot(a)
+    pylab.figure()
+    pylab.plot(f)
+    pylab.show()
 
 def pyknogram(file_name,spectogram=False):
     (rate,sig) = wav.read(file_name)
@@ -63,7 +68,7 @@ def pyknogram(file_name,spectogram=False):
         a,f = am_fm_decomposition(filtered_x[:,i])
         a[np.where(a>1e5)] = 0
         a_filtered = medfilt(a,11)
-        
+        plot_x_a_f(filtered_x[:,i],a_filtered,f)
         numerator = np.multiply(f,np.power(a,2))
         denominator = np.power(a,2)
         
