@@ -26,7 +26,7 @@ run_mfcc() {
     cat exp/mono_$trainsir/decode_toydev_$testsir/log/decode.* | grep "_" | grep -v "LOG" | grep -v "-" | sort > data/test_$testsir/text_mfcc
     
 }
-#run_mfcc
+run_mfcc
 
 run_plp() {
     plp_dir=ssc_plp
@@ -106,9 +106,9 @@ test_pykno(){
     
     steps/compute_cmvn_stats.sh data/test_$testsir exp/make_pykno/test_$testsir $pykno_dir
     steps/decode.sh --nj 10 --cmd "$train_cmd" exp/mono_pykno_$trainsir/graph data/test_$testsir exp/mono_pykno_$trainsir/decode_toydev_$testsir
-    
+     
     # Create hypothetic text sequency using decoding output (log files)
     cat exp/mono_pykno_$trainsir/decode_toydev_$testsir/log/decode.* | grep "_" | grep -v "LOG" | grep -v "-" | sort > data/test_$testsir/text_pykno
 }
-test_pykno
+#test_pykno
 
