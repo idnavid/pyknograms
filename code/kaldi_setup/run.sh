@@ -2,6 +2,7 @@
 
 . path.sh
 . cmd.sh 
+testsir=$1
 run_mfcc() {
 mfcc_dir=/erasable/nxs113020/ssc_mfcc
 trainsir=0dB
@@ -14,7 +15,7 @@ trainsir=0dB
     
     
     # Test:
-    testsir=$1
+
     steps/make_mfcc.sh --nj 15 --cmd "$train_cmd" data/test_$testsir exp/make_mfcc/test_$testsir $mfcc_dir
     steps/compute_cmvn_stats.sh data/test_$testsir exp/make_mfcc/test_$testsir $mfcc_dir
     
@@ -39,7 +40,6 @@ run_plp() {
     
     
     # Test:
-    testsir=$1
     steps/make_plp.sh --nj 15 --cmd "$train_cmd" data/test_$testsir exp/make_plp/test_$testsir $plp_dir
     steps/compute_cmvn_stats.sh data/test_$testsir exp/make_plp/test_$testsir $plp_dir
     
@@ -50,7 +50,7 @@ run_plp() {
     cat exp/mono_plp_$trainsir/decode_toydev_$testsir/log/decode.* | grep "_" | grep -v "LOG" | grep -v "-" | sort > data/test_$testsir/text_plp
     
 }
-#run_plp
+run_plp
 
 run_pykno() {
     pykno_dir=/erasable/nxs113020/ssc_pykno
@@ -80,7 +80,6 @@ run_pykno() {
     
     
     # Test:
-    testsir=$1
     python local/pykno_feat_extraction.py data/test_$testsir $pykno_dir
     ~/bin/myJsplit -M 300 -b 1 -n pykno_ssc pykno_jobs.txt
     rm pykno_jobs.txt
@@ -100,4 +99,4 @@ run_pykno() {
     # Create hypothetic text sequency using decoding output (log files)
     cat exp/mono_pykno_$trainsir/decode_toydev_$testsir/log/decode.* | grep "_" | grep -v "LOG" | grep -v "-" | sort > data/test_$testsir/text_pykno
 }
-run_pykno
+#run_pykno
