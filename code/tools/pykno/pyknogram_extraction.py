@@ -6,7 +6,7 @@ import scipy.io.wavfile as wav
 from scipy.signal import medfilt
 import pylab
 
-sys.path.append('tools/gammatone_fast')
+sys.path.append('/home/nxs113020/pyknograms/code/tools/gammatone_fast')
 from applyGammatone import *
 
 
@@ -68,7 +68,7 @@ def pyknogram(file_name,spectogram=False):
         a,f = am_fm_decomposition(filtered_x[:,i])
         a[np.where(a>1e5)] = 0
         a_filtered = medfilt(a,11)
-        plot_x_a_f(filtered_x[:,i],a_filtered,f)
+        #plot_x_a_f(filtered_x[:,i],a_filtered,f)
         numerator = np.multiply(f,np.power(a,2))
         denominator = np.power(a,2)
         

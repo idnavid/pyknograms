@@ -5,7 +5,7 @@ from scipy.signal import medfilt
 from scipy.signal import filtfilt
 import sys
 
-sys.path.append('/scratch2/nxs113020/pyknograms/code/tools/teo')
+sys.path.append('/home/nxs113020/pyknograms/code/tools/teo')
 from energy_operator import teager
 def am_fm_decomposition(x):
     """
@@ -24,5 +24,5 @@ def am_fm_decomposition(x):
     a = np.sqrt(abs(np.divide(y0,1e-7+np.power(np.sin(2*np.pi*f),2))))
     num = np.array([1]*200)
     den = np.array([1.*200])
-    a = filtfilt(num,den,a)
+    #a = filtfilt(num,den,a)
     return a, f
