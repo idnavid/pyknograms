@@ -12,7 +12,7 @@ import pylab
 import sys
 
 
-sys.path.append('/scratch2/nxs113020/pyknograms/code/tools/teo')
+sys.path.append('/home/nxs113020/pyknograms/code/tools/teo')
 import energy_operator
 
 def apply_fbank(x,fs,cfs,align=False,hilbert_envelope=False):

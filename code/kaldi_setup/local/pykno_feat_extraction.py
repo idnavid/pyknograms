@@ -3,7 +3,7 @@
 import sys
 import numpy as np
 
-sys.path.append('/scratch2/nxs113020/pyknograms/code/tools/pykno/')
+sys.path.append('../../code/tools/pykno/')
 from pyknogram_extraction import *
 
 
@@ -29,7 +29,7 @@ if __name__=='__main__':
     for i in fin:
         line_list = i.strip().split(' ')
         cmd = "python -c \"import sys;sys.path.append(\'%s\');from pykno_feat_extraction import *;extract_pykno(\'%s\',\'%s\',\'%s\')\"\n"
-        fjobs.write(cmd%('/scratch2/nxs113020/pyknograms/code/kaldi_setup/local/',line_list[0],line_list[1],feature_dir))
+        fjobs.write(cmd%('../../code/kaldi_setup/local/',line_list[0],line_list[1],feature_dir))
     fjobs.close()
     fin.close()
 

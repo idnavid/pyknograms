@@ -24,6 +24,8 @@ if __name__=='__main__':
             detected='O'
         else:
             detected='C'
+        #print i.strip(), 
+        #print "detected: %s"%(detected)
         if (keys[test_key]=='O' and detected=='O'):
             tp+=1
             pos+=1

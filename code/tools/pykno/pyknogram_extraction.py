@@ -6,7 +6,7 @@ import scipy.io.wavfile as wav
 from scipy.signal import medfilt
 import pylab
 
-sys.path.append('/scratch2/nxs113020/pyknograms/code/tools/gammatone_fast')
+sys.path.append('/home/nxs113020/pyknograms/code/tools/gammatone_fast')
 from applyGammatone import *
 
 
@@ -40,15 +40,22 @@ def enframe(x, winlen, hoplen):
     return xf
 
 
+def plot_x_a_f(s,a,f):
+    pylab.figure()
+    pylab.plot(s)
+    pylab.figure()
+    pylab.plot(a)
+    pylab.figure()
+    pylab.plot(f)
+    pylab.show()
 
-def pyknogram(file_name):
+def pyknogram(file_name,spectogram=False):
     (rate,sig) = wav.read(file_name)
     x = sig.reshape((len(sig),1))
-    #x = x[13582:65645]
     fs = rate
     window_size = int(0.025*fs)
     shift_size = int(0.010*fs)
-    
+     
     nChannels = 120
     cfs = make_centerFreq(20,3800,nChannels)
     filtered_x,bandwidths = apply_fbank(x,fs,cfs)
@@ -56,11 +63,12 @@ def pyknogram(file_name):
     nTime =  1 + np.int(np.floor((len(x) - window_size) / float(shift_size)))
     nFreq = nChannels
     pykno_bins = np.zeros((nTime,nChannels)) # density bins
+    tmp = np.zeros((nTime,nChannels))
     for i in range(nChannels):
         a,f = am_fm_decomposition(filtered_x[:,i])
         a[np.where(a>1e5)] = 0
         a_filtered = medfilt(a,11)
-        
+        #plot_x_a_f(filtered_x[:,i],a_filtered,f)
         numerator = np.multiply(f,np.power(a,2))
         denominator = np.power(a,2)
         
@@ -68,7 +76,10 @@ def pyknogram(file_name):
         framed_den = np.sum(enframe(denominator,window_size,shift_size),axis=1)
          
         weighted_freqs = fs*np.divide(framed_num,framed_den)
-        candidates = np.where( abs(weighted_freqs-cfs[i]) < bandwidths[i]/10 )
-         
-        pykno_bins[candidates,i] += framed_den[candidates]/(np.sqrt(2*bandwidths[i]))
+        tmp[:,i] = weighted_freqs
+        if not(spectogram):
+            candidates = np.where( abs(weighted_freqs-cfs[i]) < bandwidths[i]/5 )
+        else:
+            candidates = np.where( abs(weighted_freqs-cfs[i]) > 0.1)
+        pykno_bins[candidates,i] += np.log(framed_den[candidates]/(np.sqrt(2*bandwidths[i])) + 1e-7)
     return pykno_bins
