@@ -7,10 +7,10 @@ testsir=$1
 run_mfcc() {
     mfcc_dir=ssc_mfcc
     trainsir=0dB
-    #rm data/train_$trainsir/feats.scp
-    #rm data/train_$trainsir/cmvn.scp
-    #steps/make_mfcc.sh --nj 200 --cmd "$train_cmd" data/train_$trainsir exp/make_mfcc/train_$trainsir $mfcc_dir
-    #steps/compute_cmvn_stats.sh data/train_$trainsir exp/make_mfcc/train_$trainsir $mfcc_dir
+    rm data/train_$trainsir/feats.scp
+    rm data/train_$trainsir/cmvn.scp
+    steps/make_mfcc.sh --nj 200 --cmd "$train_cmd" data/train_$trainsir exp/make_mfcc/train_$trainsir $mfcc_dir
+    steps/compute_cmvn_stats.sh data/train_$trainsir exp/make_mfcc/train_$trainsir $mfcc_dir
     #steps/train_mono.sh  --nj 50 --cmd "$train_cmd" data/train_$trainsir data/lang exp/mono_$trainsir
     #utils/mkgraph.sh --mono data/lang exp/mono_$trainsir exp/mono_$trainsir/graph 
     
@@ -20,10 +20,10 @@ run_mfcc() {
     steps/compute_cmvn_stats.sh data/test_$testsir exp/make_mfcc/test_$testsir $mfcc_dir
     
     
-    steps/decode.sh --nj 10 --cmd "$train_cmd" exp/mono_$trainsir/graph data/test_$testsir exp/mono_$trainsir/decode_toydev_$testsir
+    #steps/decode.sh --nj 10 --cmd "$train_cmd" exp/mono_$trainsir/graph data/test_$testsir exp/mono_$trainsir/decode_toydev_$testsir
     
     # Create hypothetic text sequency using decoding output (log files)
-    cat exp/mono_$trainsir/decode_toydev_$testsir/log/decode.* | grep "_" | grep -v "LOG" | grep -v "-" | sort > data/test_$testsir/text_mfcc
+    #cat exp/mono_$trainsir/decode_toydev_$testsir/log/decode.* | grep "_" | grep -v "LOG" | grep -v "-" | sort > data/test_$testsir/text_mfcc
     
 }
 run_mfcc
