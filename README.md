@@ -8,8 +8,8 @@ Feel free to reach out if you need help to run this code.
 ### Citations:
 A detailed description of the algorithm is presented in our Transactions paper. Please cite:
 
-[1] "Teager-Kaiser Energy Operators for Overlapped Speech Detection," Shokouhi, Hansen. IEEE/ACM Trans. on ASLP, 2017. <br/>
-[2] "Robust Overlapped Speech Detection and its Application in Word-Count Estimation for Prof-Life-Log Data," Shokouhi, Ziaei, Sangwan, Hansen, ICASSP, 2015. <br/>
+##### [1] "Teager-Kaiser Energy Operators for Overlapped Speech Detection," Shokouhi, Hansen. IEEE/ACM Trans. on ASLP, 2017. <br/>
+##### [2] "Robust Overlapped Speech Detection and its Application in Word-Count Estimation for Prof-Life-Log Data," Shokouhi, Ziaei, Sangwan, Hansen, ICASSP, 2015. <br/>
 
 - Prereqs:
     - numpy
