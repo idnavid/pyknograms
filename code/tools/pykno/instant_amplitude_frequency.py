@@ -3,17 +3,15 @@
 import numpy as np
 from scipy.signal import medfilt
 from scipy.signal import filtfilt
-import sys
 
-sys.path.append('/home/nxs113020/pyknograms/code/tools/teo')
-from energy_operator import teager
+from tools.teo import energy_operator
 def am_fm_decomposition(x):
     """
         returns 
         f: instantaneous frequency per sample
         a: instantaneous amplitude per sample
         """
-    y0,y1 = teager(x,first_diff=True)
+    y0,y1 = energy_operator.teager(x,first_diff=True)
     # y0: TEO of x(n)
     # y1: TEO of the x(n) - x(n-1)
     teo_relative_slope = np.divide(y1,2*y0 + 1e-7)

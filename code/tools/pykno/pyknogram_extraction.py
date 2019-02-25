@@ -1,16 +1,14 @@
 #! /usr/bin/python 
 
 import numpy as np
-import sys
 import scipy.io.wavfile as wav
 from scipy.signal import medfilt
 import pylab
 
-sys.path.append('/home/nxs113020/pyknograms/code/tools/gammatone_fast')
-from applyGammatone import *
+from tools.gammatone_fast import applyGammatone
 
 
-from instant_amplitude_frequency import am_fm_decomposition
+from tools.pykno.instant_amplitude_frequency import am_fm_decomposition
 
 
 def sfx(pykno_bins_in):
@@ -57,8 +55,8 @@ def pyknogram(file_name,spectogram=False):
     shift_size = int(0.010*fs)
      
     nChannels = 120
-    cfs = make_centerFreq(20,3800,nChannels)
-    filtered_x,bandwidths = apply_fbank(x,fs,cfs)
+    cfs = applyGammatone.make_centerFreq(20,3800,nChannels)
+    filtered_x,bandwidths = applyGammatone.apply_fbank(x,fs,cfs)
     
     nTime =  1 + np.int(np.floor((len(x) - window_size) / float(shift_size)))
     nFreq = nChannels
