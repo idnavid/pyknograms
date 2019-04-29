@@ -12,9 +12,9 @@ A detailed description of the algorithm is presented in our Transactions paper. 
 ##### [2] "Robust Overlapped Speech Detection and its Application in Word-Count Estimation for Prof-Life-Log Data," Shokouhi, Ziaei, Sangwan, Hansen, ICASSP, 2015. <br/>
 
 - Prereqs:
-    - numpy
-    - scipy
-    - pylab
+    - `numpy`
+    - `scipy`
+    - `pylab`
 
 The directory "code" contains an example script (example.py) that calculates pyknograms 
 for the wavefile selection.wav
